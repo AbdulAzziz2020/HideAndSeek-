@@ -5,19 +5,23 @@ using UnityEngine;
 
 public class CollisionWithObject : MonoBehaviour
 {
-    private void OnTriggerStay(Collider other)
+    public Collider groundCollider;
+
+    public void OnCollisionStay(Collision collisionInfo)
     {
-        if (other.CompareTag("Target"))
+        if (collisionInfo.gameObject.CompareTag("Target"))
         {
-            other.isTrigger = true;
+            Physics.IgnoreCollision(GetComponent<Collider>(), collisionInfo.gameObject.GetComponent<Collider>());
+            collisionInfo.gameObject.layer = LayerMask.NameToLayer("Ground");
         }
     }
-    
-    private void OnTriggerExit(Collider other)
+
+    public void OnCollisionExit(Collision collisionInfo)
     {
-        if (other.CompareTag("Target"))
+        if (collisionInfo.gameObject.CompareTag("Target"))
         {
-            other.isTrigger = false;
+            Physics.IgnoreCollision(groundCollider, collisionInfo.gameObject.GetComponent<Collider>());
+            collisionInfo.gameObject.layer = LayerMask.NameToLayer("Target");
         }
     }
 }

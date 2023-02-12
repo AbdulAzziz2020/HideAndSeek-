@@ -49,6 +49,7 @@ public class FieldOfView : MonoBehaviour
     {
         FieldOfViewDanger(0);
         FieldOfViewAttention(1);
+        _alertSystem.Alert(dangerArea, warningArea);
     }
     
     public void FieldOfViewDanger(int lineIndex)
@@ -70,19 +71,13 @@ public class FieldOfView : MonoBehaviour
                     SpreadingOut(AlertSystem.AlertState.Danger);
                 }
                 
-                else
-                {
-                    Debug.Log("Hallo this spreading cancel");
-                    this.dangerArea = false;
-                    // SpreadingCancel(AlertSystem.AlertState.Safe);
-                }
-                    
+                else this.dangerArea = false;
             }
             else this.dangerArea = false;
 
         } else if (this.dangerArea) this.dangerArea = false;
         
-        if(!warningArea && !this.dangerArea) _alertSystem.alert = AlertSystem.AlertState.Safe;
+        // if(!warningArea && !this.dangerArea) _alertSystem.alert = AlertSystem.AlertState.Warning;
 
         Line(lineIndex, dangerAngle, dangerRadius);
     }
@@ -113,7 +108,7 @@ public class FieldOfView : MonoBehaviour
             else warningArea = false;
         } else if (warningArea)  warningArea = false;
         
-        if(!warningArea && !this.dangerArea) _alertSystem.alert = AlertSystem.AlertState.Safe;
+        // if(!warningArea && !this.dangerArea) _alertSystem.alert = AlertSystem.AlertState.Safe;
 
         Line(lineIndex, attentionAngle, warningRadius);
     }
@@ -144,8 +139,7 @@ public class FieldOfView : MonoBehaviour
         {
             FieldOfView fieldOfView = allies[i].GetComponent<FieldOfView>();
 
-            if (fieldOfView.dangerArea) break;
-            else
+            if (!fieldOfView.dangerArea)
             {
                 fieldOfView.dangerArea = true;
                 fieldOfView._alertSystem.alert = alertState;
